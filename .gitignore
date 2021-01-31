@@ -65,3 +65,10 @@ yarn-debug.log*
 # Ignore uploaded files in development
 /storage/*
 !/storage/.keep
+
+# Ignore IDE files
+.idea/
+.DS_Store
+._.DS_Store
+**/.DS_Store
+**/._.DS_Store
