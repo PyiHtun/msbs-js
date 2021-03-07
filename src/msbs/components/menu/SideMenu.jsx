@@ -14,8 +14,8 @@ import {
 } from '@ant-design/icons';
 
 const propsType = {
-  selectedMenu: PropTypes.func.isRequired
-}
+  selectedMenu: PropTypes.func,
+};
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
@@ -24,12 +24,16 @@ const defaultProps = {
 };
 
 const SideMenu = (props) => {
-  const selectedMenu = props.selectedMenu;
-  const [ isCollapsed, setIsCollapsed ] = useState( 1 )
+  const { selectedMenu } = props;
+  const [isCollapsed, setIsCollapsed] = useState(1);
 
   return (
-    <Sider collapsible collapsed={isCollapsed} onCollapse={() => setIsCollapsed(prevIsCollapsed => !prevIsCollapsed )}>
-      <div/>
+    <Sider
+      collapsible
+      collapsed={isCollapsed}
+      onCollapse={() => setIsCollapsed((prevIsCollapsed) => !prevIsCollapsed)}
+    >
+      <div />
       <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" multiple={false} onSelect={(e) => selectedMenu(e.key)}>
         <Menu.Item key="home" icon={<HomeOutlined />}>
           Home
@@ -57,8 +61,8 @@ const SideMenu = (props) => {
         </SubMenu>
       </Menu>
     </Sider>
-  )
-}
+  );
+};
 
 SideMenu.propTypes = propsType;
 SideMenu.defaultProps = defaultProps;
