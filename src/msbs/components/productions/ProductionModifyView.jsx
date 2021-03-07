@@ -3,7 +3,9 @@ import {
 } from 'antd';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { EditFilled, GoldFilled, PlusSquareTwoTone } from '@ant-design/icons';
+import {
+  EditFilled, GoldFilled, PlusSquareTwoTone, SearchOutlined,
+} from '@ant-design/icons';
 import moment from 'moment';
 import ProductSearchModal from '../product/ProductSearchModal';
 
@@ -24,18 +26,26 @@ const ProductionsModifyView = (props) => {
   const [productionProduct, setProductionProduct] = useState({});
 
   const onSelectedProduct = (product) => {
-    if (product) {
-      setProductionProduct(product);
+    console.log('PH View', product);
+    if (product.length) {
+      setProductionProduct(product[0]);
       setModalVisible(false);
+      // setTimeout(() => {
+      //   setModalVisible(false);
+      // }, 1000);
     }
   };
 
-  const onClose = (closeFlag) => {
-    setModalVisible(closeFlag);
+  const onClose = () => {
+    setModalVisible(false);
   };
 
   const modalContorl = () => {
     setModalVisible((prevModalVisible) => !prevModalVisible);
+  };
+
+  const modalControl = () => {
+    setModalVisible(true);
   };
 
   const resourceInput = [
@@ -59,7 +69,7 @@ const ProductionsModifyView = (props) => {
 
     },
     {
-      title: 'Total Amount',
+      title: 'Total',
       key: 'total_price',
       dataIndex: 'total_price',
       sorter: (a, b) => a.unit_price?.localeCompare(b.unit_price),
@@ -76,31 +86,57 @@ const ProductionsModifyView = (props) => {
               <EditFilled />
               Details
             </span>
-)}
+          )}
           key="1"
         >
-          <Row gutter={[8, 16]}>
-            <Col span={20}>
+          <Row gutter={[16, 24]}>
+            <Col span={24}>
               <Text>Production Name</Text>
               <Input style={{ width: '100%' }} placeholder="Production Name" />
             </Col>
           </Row>
-          <Row gutter={[8, 16]}>
-            <Col span={10}>
+          <Row gutter={[16, 24]}>
+            <Col span={18}>
               <Text>Product</Text>
-              <Search style={{ width: '100%' }} placeholder="Product Search" allowClear onSearch={modalContorl} value={productionProduct?.name} />
+              <Input
+                style={{ width: '100%' }}
+                // placeholder="Product Search"
+                allowClear
+                // onKeyDown={(e) => e.preventDefault()}
+                onChange={(e) => { if (!e.target.value) setProductionProduct({}); }}
+                value={productionProduct ? productionProduct.name : ''}
+              />
             </Col>
-            <Col span={10}>
+            <Col span={6}>
+              <Button type="primary" icon={<SearchOutlined />} onClick={modalControl}>
+                Search
+              </Button>
+            </Col>
+          </Row>
+          <Row gutter={[16, 24]}>
+            <Col span={12}>
+              <Text>Product</Text>
+              <Search
+                style={{ width: '100%' }}
+                placeholder="Product Search"
+                // allowClear
+                onSearch={modalControl}
+                // onKeyDown={(e) => e.preventDefault()}
+                value={productionProduct?.name}
+                enterButton="Search"
+              />
+            </Col>
+            <Col span={12}>
               <Text>Production Supervisor</Text>
               <Search style={{ width: '100%' }} placeholder="Personnel Search" allowClear onSearch={modalContorl} />
             </Col>
           </Row>
-          <Row gutter={[8, 16]}>
-            <Col span={10}>
+          <Row gutter={[16, 24]}>
+            <Col span={12}>
               <Text>Start Date</Text>
               <DatePicker style={{ width: '100%' }} />
             </Col>
-            <Col span={10}>
+            <Col span={12}>
               <Text>Production Season</Text>
               <Select style={{ width: '100%' }} placeholder="Select Season">
                 <Option value="1">Flooded</Option>
@@ -109,25 +145,25 @@ const ProductionsModifyView = (props) => {
               </Select>
             </Col>
           </Row>
-          <Row gutter={[8, 16]}>
-            <Col span={10}>
+          <Row gutter={[16, 24]}>
+            <Col span={12}>
               <Text>Production Type</Text>
               <Select style={{ width: '100%' }} placeholder="Select Type">
                 <Option value="1">Contractor</Option>
                 <Option value="2">Own</Option>
               </Select>
             </Col>
-            <Col span={10}>
+            <Col span={12}>
               <Text>Contractor</Text>
               <Search style={{ width: '100%' }} placeholder="Contractor Search" allowClear onSearch={modalContorl} />
             </Col>
           </Row>
-          <Row gutter={[8, 16]}>
-            <Col span={10}>
+          <Row gutter={[16, 24]}>
+            <Col span={12}>
               <Text>Location</Text>
               <Search style={{ width: '100%' }} placeholder="Location Search" allowClear onSearch={modalContorl} />
             </Col>
-            <Col span={10}>
+            <Col span={12}>
               <Text>Production Area (Acre)</Text>
               <InputNumber style={{ width: '100%' }} min={0} max={10000} size="middle" />
             </Col>
@@ -142,22 +178,22 @@ const ProductionsModifyView = (props) => {
 )}
           key="2"
         >
-          <Row gutter={[8, 16]}>
-            <Col span={10}>
+          <Row gutter={[16, 24]}>
+            <Col span={12}>
               <Text>Product</Text>
               <Search style={{ width: '100%' }} placeholder="Product Search" allowClear onSearch={modalContorl} />
             </Col>
-            <Col span={10}>
+            <Col span={12}>
               <Text>Transaction Date</Text>
               <DatePicker style={{ width: '100%' }} />
             </Col>
           </Row>
-          <Row gutter={[8, 16]}>
+          <Row gutter={[16, 24]}>
             <Col span={8}>
               <Text>Unit Price</Text>
               <InputNumber style={{ width: '100%' }} min={0} size="middle" />
             </Col>
-            <Col span={4}>
+            <Col span={8}>
               <Text>Quantity </Text>
               <InputNumber style={{ width: '100%' }} min={0} size="middle" />
             </Col>
@@ -166,19 +202,19 @@ const ProductionsModifyView = (props) => {
               <InputNumber style={{ width: '100%' }} disabled size="middle" />
             </Col>
           </Row>
-          <Row gutter={[8, 16]}>
-            <Col span={10}>
+          <Row gutter={[16, 24]}>
+            <Col span={12}>
               <Text>Requested By</Text>
               <Search style={{ width: '100%' }} placeholder="Personnel Search" allowClear onSearch={modalContorl} />
             </Col>
-            <Col span={10}>
+            <Col span={12}>
               <Text>Authorized By</Text>
               <Search style={{ width: '100%' }} placeholder="Personnel Search" allowClear onSearch={modalContorl} />
             </Col>
           </Row>
-          <Row gutter={[8, 16]}>
-            <Col span={20} style={{ textAlign: 'right' }}>
-              <Button icon={<PlusSquareTwoTone />} onClick={console.log('Added')} type="small">
+          <Row gutter={[16, 24]}>
+            <Col span={24} style={{ textAlign: 'right' }}>
+              <Button icon={<PlusSquareTwoTone />} onClick={modalControl} type="small">
                 Add
               </Button>
             </Col>

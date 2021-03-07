@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Layout, Menu } from 'antd';
 import PropTypes from 'prop-types';
 import 'antd/dist/antd.css';
-
 import {
   HomeOutlined,
   TableOutlined,
@@ -12,6 +11,7 @@ import {
   ShoppingCartOutlined,
   ShopOutlined,
 } from '@ant-design/icons';
+import { MENU_ITEMS } from '../common/SharedTypes';
 
 const propsType = {
   selectedMenu: PropTypes.func,
@@ -35,29 +35,29 @@ const SideMenu = (props) => {
     >
       <div />
       <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" multiple={false} onSelect={(e) => selectedMenu(e.key)}>
-        <Menu.Item key="home" icon={<HomeOutlined />}>
+        <Menu.Item key={MENU_ITEMS.MAIN_HOME} icon={<HomeOutlined />}>
           Home
         </Menu.Item>
-        <Menu.Item key="productions" icon={<TableOutlined />}>
+        <Menu.Item key={MENU_ITEMS.MAIN_PRODUCTIONS} icon={<TableOutlined />}>
           Productions
         </Menu.Item>
-        <Menu.Item key="warehouse" icon={<ShopOutlined />}>
+        <Menu.Item key={MENU_ITEMS.MAIN_WAREHOUSE} icon={<ShopOutlined />}>
           Warehouse
         </Menu.Item>
-        <Menu.Item key="sales" icon={<ShoppingCartOutlined />}>
+        <Menu.Item key={MENU_ITEMS.MAIN_SALES} icon={<ShoppingCartOutlined />}>
           Sales
         </Menu.Item>
-        <Menu.Item key="ledger" icon={<BookOutlined />}>
+        <Menu.Item key={MENU_ITEMS.MAIN_LEDGER} icon={<BookOutlined />}>
           Ledger
         </Menu.Item>
-        <SubMenu key="prsnl" icon={<TeamOutlined />} title="Personnel">
-          <Menu.Item key="prsnlSetting">Setting</Menu.Item>
-          <Menu.Item key="prsnlPrsnl">Personnel</Menu.Item>
+        <SubMenu key={MENU_ITEMS.MAIN_PRSNL} icon={<TeamOutlined />} title="Personnel">
+          <Menu.Item key={MENU_ITEMS.SUB_PRSNL_SETTING}>Setting</Menu.Item>
+          <Menu.Item key={MENU_ITEMS.SUB_PRSNL_PRSNL}>Personnel</Menu.Item>
         </SubMenu>
-        <SubMenu key="reports" icon={<LineChartOutlined />} title="Reports">
-          <Menu.Item key="reportProductions">Productions</Menu.Item>
-          <Menu.Item key="reportWarehouse">Warehouse</Menu.Item>
-          <Menu.Item key="reportSales">Sales</Menu.Item>
+        <SubMenu key={MENU_ITEMS.MAIN_REPORTS} icon={<LineChartOutlined />} title="Reports">
+          <Menu.Item key={MENU_ITEMS.SUB_REPORTS_PRODUCTIONS}>Productions</Menu.Item>
+          <Menu.Item key={MENU_ITEMS.SUB_REPORTS_WAREHOUSE}>Warehouse</Menu.Item>
+          <Menu.Item key={MENU_ITEMS.SUB_REPORTS_SALES}>Sales</Menu.Item>
         </SubMenu>
       </Menu>
     </Sider>

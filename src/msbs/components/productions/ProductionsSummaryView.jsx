@@ -141,7 +141,7 @@ const ProductionsSummaryView = function () {
       <Drawer
         destroyOnClose
         title="Create a production"
-        width={720}
+        width={520}
         onClose={drawerContorl}
         visible={drawerVisible}
         bodyStyle={{ paddingBottom: 80 }}
