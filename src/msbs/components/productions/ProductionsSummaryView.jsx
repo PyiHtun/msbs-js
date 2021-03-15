@@ -13,6 +13,7 @@ import ProductionModifyView from './ProductionModifyView';
 // TODO need create mock class
 import productionList from './Production.mock';
 import productList from '../product/ProductList.mock';
+import personnelList from '../personnel/PersonnelList.mock';
 
 const ProductionsSummaryView = function () {
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -20,8 +21,6 @@ const ProductionsSummaryView = function () {
   const drawerContorl = () => {
     setDrawerVisible((prevDrawerVisible) => !prevDrawerVisible);
   };
-
-  // const onSearch = () => {};
 
   const columns = [
     {
@@ -80,37 +79,36 @@ const ProductionsSummaryView = function () {
     },
   ];
 
-  const personnelSearchCols = [
-    {
-      title: 'Production',
-      dataIndex: 'production',
-      key: 'production',
-      sorter: (a, b) => a.production.localeCompare(b.production),
-      // render: text => <a>{text}</a>,
-    },
-    {
-      title: 'Start Date',
-      dataIndex: 'start_date',
-      key: 'start_date',
-      sorter: (a, b) => moment(a.start_date || 0).unix() - moment(b.start_date || 0).unix(),
-    },
-  ];
+  // const personnelSearchCols = [
+  //   {
+  //     title: 'Production',
+  //     dataIndex: 'production',
+  //     key: 'production',
+  //     sorter: (a, b) => a.production.localeCompare(b.production),
+  //     // render: text => <a>{text}</a>,
+  //   },
+  //   {
+  //     title: 'Start Date',
+  //     dataIndex: 'start_date',
+  //     key: 'start_date',
+  //     sorter: (a, b) => moment(a.start_date || 0).unix() - moment(b.start_date || 0).unix(),
+  //   },
+  // ];
 
-  const productSearchCols = [
-    {
-      title: 'Production',
-      dataIndex: 'production',
-      key: 'production',
-      sorter: (a, b) => a.production.localeCompare(b.production),
-      // render: text => <a>{text}</a>,
-    },
-    {
-      title: 'Start Date',
-      dataIndex: 'start_date',
-      key: 'start_date',
-      sorter: (a, b) => moment(a.start_date || 0).unix() - moment(b.start_date || 0).unix(),
-    },
-  ];
+  // const productSearchCols = [
+  //   {
+  //     title: 'Production',
+  //     dataIndex: 'production',
+  //     key: 'production',
+  //     sorter: (a, b) => a.production.localeCompare(b.production),
+  //   },
+  //   {
+  //     title: 'Start Date',
+  //     dataIndex: 'start_date',
+  //     key: 'start_date',
+  //     sorter: (a, b) => moment(a.start_date || 0).unix() - moment(b.start_date || 0).unix(),
+  //   },
+  // ];
 
   return (
     <div>
@@ -136,32 +134,34 @@ const ProductionsSummaryView = function () {
           }, // click row
         })}
       />
-      {/* <Modal title="Search" visible={modalVisible} onOk={modalContorl} onCancel={modalContorl}> */}
-      {/* </Modal> */}
-      <Drawer
-        destroyOnClose
-        title="Create a production"
-        width={520}
-        onClose={drawerContorl}
-        visible={drawerVisible}
-        bodyStyle={{ paddingBottom: 80 }}
-        footer={(
-          <div
-            style={{
-              textAlign: 'right',
-            }}
+      {drawerVisible 
+        ? 
+        (
+          <Drawer
+            destroyOnClose
+            title="Modify Production"
+            width={520}
+            onClose={drawerContorl}
+            visible={drawerVisible}
+            bodyStyle={{ paddingBottom: 80 }}
+            footer={(
+              <div
+                style={{
+                  textAlign: 'right',
+                }}
+              >
+                <Button onClick={drawerContorl} style={{ marginRight: 8 }}>
+                  Cancel
+                </Button>
+                <Button disabled onClick={drawerContorl} type="primary">
+                  Save
+                </Button>
+              </div>
+            )}
           >
-            <Button onClick={drawerContorl} style={{ marginRight: 8 }}>
-              Cancel
-            </Button>
-            <Button disabled onClick={drawerContorl} type="primary">
-              Save
-            </Button>
-          </div>
-        )}
-      >
-        <ProductionModifyView productList={productList} />
-      </Drawer>
+            <ProductionModifyView productList={productList} personnelList={personnelList} />
+          </Drawer> 
+        ) : null }
     </div>
   );
 };

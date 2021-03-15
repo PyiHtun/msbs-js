@@ -1,13 +1,15 @@
+/* eslint-disable react/require-default-props */
 import {
   Button, Col, DatePicker, Input, InputNumber, Row, Select, Table, Tabs, Typography,
 } from 'antd';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
-  EditFilled, GoldFilled, PlusSquareTwoTone, SearchOutlined,
+  EditFilled, GoldFilled, PlusSquareTwoTone,
 } from '@ant-design/icons';
 import moment from 'moment';
 import ProductSearchModal from '../product/ProductSearchModal';
+import PersonnelSearchModal from '../common/SearchModal';
 
 const { Text } = Typography;
 const { Search } = Input;
@@ -15,29 +17,35 @@ const { Option } = Select;
 const { TabPane } = Tabs;
 
 const propsType = {
-  // eslint-disable-next-line react/require-default-props
   productList: PropTypes.arrayOf(PropTypes.object),
+  personnelList: PropTypes.arrayOf(PropTypes.object),
 };
 
 const ProductionsModifyView = (props) => {
-  const { productList } = props;
+  const { productList, personnelList } = props;
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [prsnlModalVisible, setPrsnlModalVisible] = useState(false);
   const [productionProduct, setProductionProduct] = useState({});
+  const [productionPrsnl, setProductionPrsnl] = useState({});
 
   const onSelectedProduct = (product) => {
-    console.log('PH View', product);
-    if (product.length) {
-      setProductionProduct(product[0]);
+    if (product) {
+      setProductionProduct(product);
       setModalVisible(false);
-      // setTimeout(() => {
-      //   setModalVisible(false);
-      // }, 1000);
+    }
+  };
+
+  const onSelectedPrsnl = (prsnl) => {
+    if (prsnl) {
+      setProductionPrsnl(prsnl);
+      setPrsnlModalVisible(false);
     }
   };
 
   const onClose = () => {
     setModalVisible(false);
+    setPrsnlModalVisible(false);
   };
 
   const modalContorl = () => {
@@ -45,7 +53,13 @@ const ProductionsModifyView = (props) => {
   };
 
   const modalControl = () => {
+    setProductionProduct({});
     setModalVisible(true);
+  };
+
+  const prsnlModalControl = () => {
+    setProductionPrsnl({});
+    setPrsnlModalVisible(true);
   };
 
   const resourceInput = [
@@ -77,6 +91,21 @@ const ProductionsModifyView = (props) => {
     },
   ];
 
+  const prsnlColumnsList = [
+    {
+      title: 'Personnel',
+      key: 'name',
+      sorter: true,
+      search: true,
+    },
+    {
+      title: 'Position',
+      key: 'position',
+      sorter: true,
+      search: true,
+    },
+  ];
+
   return (
     <>
       <Tabs defaultActiveKey="1">
@@ -96,39 +125,27 @@ const ProductionsModifyView = (props) => {
             </Col>
           </Row>
           <Row gutter={[16, 24]}>
-            <Col span={18}>
-              <Text>Product</Text>
-              <Input
-                style={{ width: '100%' }}
-                // placeholder="Product Search"
-                allowClear
-                // onKeyDown={(e) => e.preventDefault()}
-                onChange={(e) => { if (!e.target.value) setProductionProduct({}); }}
-                value={productionProduct ? productionProduct.name : ''}
-              />
-            </Col>
-            <Col span={6}>
-              <Button type="primary" icon={<SearchOutlined />} onClick={modalControl}>
-                Search
-              </Button>
-            </Col>
-          </Row>
-          <Row gutter={[16, 24]}>
             <Col span={12}>
               <Text>Product</Text>
               <Search
                 style={{ width: '100%' }}
                 placeholder="Product Search"
-                // allowClear
+                allowClear
                 onSearch={modalControl}
-                // onKeyDown={(e) => e.preventDefault()}
-                value={productionProduct?.name}
-                enterButton="Search"
+                onKeyDown={(e) => e.preventDefault()}
+                value={productionProduct ? productionProduct.name : ''}
               />
             </Col>
             <Col span={12}>
               <Text>Production Supervisor</Text>
-              <Search style={{ width: '100%' }} placeholder="Personnel Search" allowClear onSearch={modalContorl} />
+              <Search
+                style={{ width: '100%' }}
+                placeholder="Personnel Search"
+                allowClear
+                onSearch={prsnlModalControl}
+                onKeyDown={(e) => e.preventDefault()}
+                value={productionPrsnl ? productionPrsnl.name : ''}
+              />
             </Col>
           </Row>
           <Row gutter={[16, 24]}>
@@ -222,12 +239,25 @@ const ProductionsModifyView = (props) => {
           <Table size="small" columns={resourceInput} bordered tableLayout="auto" />
         </TabPane>
       </Tabs>
-      <ProductSearchModal
-        productList={productList}
-        onSelectedProduct={onSelectedProduct}
-        visible={modalVisible}
-        onClose={onClose}
-      />
+      {modalVisible
+        ? (
+          <ProductSearchModal
+            productList={productList}
+            onSelectedProduct={onSelectedProduct}
+            visible={modalVisible}
+            onClose={onClose}
+          />
+        ) : null}
+      {prsnlModalVisible
+        ? (
+          <PersonnelSearchModal
+            sourceDataList={personnelList}
+            columnsList={prsnlColumnsList}
+            onSelectionConfirm={onSelectedPrsnl}
+            visible={prsnlModalVisible}
+            onClose={onClose}
+          />
+        ) : null}
     </>
   );
 };

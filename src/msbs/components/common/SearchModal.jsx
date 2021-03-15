@@ -8,20 +8,21 @@ import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 
 const propsType = {
-  productList: PropTypes.arrayOf(PropTypes.object),
-  onSelectedProduct: PropTypes.func,
+  sourceDataList: PropTypes.arrayOf(PropTypes.object),
+  columnsList: PropTypes.arrayOf(PropTypes.object),
+  onSelectionConfirm: PropTypes.func,
   visible: PropTypes.bool,
   onClose: PropTypes.func,
 };
 
 const defaultProps = {
-  onSelectedProduct: () => {},
+  onSelectionConfirm: () => {},
   onClose: () => {},
 };
 
-const ProductSearchModal = (props) => {
+const SearchModal = (props) => {
   const {
-    productList, onSelectedProduct, visible, onClose,
+    sourceDataList, columnsList, onSelectionConfirm, visible, onClose,
   } = props;
 
   const [searchText, setSearchText] = useState('');
@@ -92,24 +93,19 @@ const ProductSearchModal = (props) => {
     )),
   });
 
-  const productSearchCol = [
-    {
-      title: 'Product',
-      dataIndex: 'name',
-      key: 'name',
-      sorter: (a, b) => a.name.localeCompare(b.name),
-      ...getColumnSearchProps('name'),
-    },
-    {
-      title: 'Category',
-      dataIndex: 'catg',
-      key: 'catg',
-      sorter: (a, b) => a.catg.localeCompare(b.catg),
-      ...getColumnSearchProps('catg'),
-    },
-  ];
+  const columns = () => {
+    if (!columnsList || !columnsList.length) {
+      return [];
+    }
 
-  // rowSelection object indicates the need for row selection
+    return columnsList.map((obj) => ({
+      title: obj.title,
+      key: obj.key,
+      sorter: obj.sorter ? (a, b) => a[obj.key].localeCompare(b[obj.key]) : undefined,
+      ...(obj.search ? getColumnSearchProps(obj.key) : undefined),
+    }));
+  };
+
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
       setSelectedRecord(selectedRows.length ? selectedRows[0] : {});
@@ -120,13 +116,13 @@ const ProductSearchModal = (props) => {
   };
 
   const handleClickOK = () => {
-    onSelectedProduct(selectedRecord);
+    onSelectionConfirm(selectedRecord);
   };
 
   return (
     <>
       <Modal
-        title="Product Search"
+        title="Search"
         destroyOnClose
         visible={visible}
         onOk={handleClickOK}
@@ -140,9 +136,9 @@ const ProductSearchModal = (props) => {
             ...rowSelection,
           }}
           size="small"
-          columns={productSearchCol}
+          columns={columns}
           bordered
-          dataSource={productList}
+          dataSource={sourceDataList}
           tableLayout="auto"
 
         />
@@ -151,6 +147,6 @@ const ProductSearchModal = (props) => {
   );
 };
 
-ProductSearchModal.propTypes = propsType;
-ProductSearchModal.defaultProps = defaultProps;
-export default ProductSearchModal;
+SearchModal.propTypes = propsType;
+SearchModal.defaultProps = defaultProps;
+export default SearchModal;
